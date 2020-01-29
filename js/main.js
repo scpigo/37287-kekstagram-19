@@ -32,7 +32,9 @@ var randomize = function(min, max) {
 var assembleCommentText = function () {
   var commentText = '';
 
-  for (var i = 1; i <= randomize(1, 2); i++) {
+  var sentences = randomize(1, 2);
+
+  for (var i = 1; i <= sentences; i++) {
     commentText += commentTemplates[randomize(0, commentTemplates.length - 1)] + ' ';
   }
 
@@ -50,7 +52,7 @@ var generateComments = function() {
       name: namesTemplate[randomize(0, namesTemplate.length - 1)]
     }
 
-    comments[i] = comment;
+    comments.push(comment);
   }
 
   return comments;
@@ -59,29 +61,37 @@ var generateComments = function() {
 // Генерация данных о фотографии
 var insertPhotoInArray = function (num) {
   var photo = {
-      url: 'photos/' + (i + 1) + '.jpg',
+      url: 'photos/' + (num + 1) + '.jpg',
       description: '???',
       likes: randomize(15, 200),
       comments: generateComments()
     }
 
-  photoArray[num] = photo;
+  photoArray.push(photo);
 };
 
 // Генерация DOM-элемента с фотографией
-var generatePictureElement = function (pic) {
+var generatePictureElement = function (num) {
   var picture = picTemplate.cloneNode(true);
 
   var img = picture.querySelector('.picture__img');
-  img.src = photoArray[pic].url;
+  img.src = photoArray[num].url;
 
   var likes = picture.querySelector('.picture__likes');
-  likes.textContent = photoArray[pic].likes;
+  likes.textContent = photoArray[num].likes;
 
   var comments = picture.querySelector('.picture__comments');
-  comments.textContent = photoArray[pic].comments.length;
+  comments.textContent = photoArray[num].comments.length;
 
   pictures.appendChild(picture);
+}
+
+// Заполнение массива нужным кол-вом изображений
+var fillPhotoArray = function (arrElements) {
+  for (var i = 0; i < arrElements; i++) {
+    insertPhotoInArray(i);
+    var picture = generatePictureElement(i);
+  };
 }
 
 var pictures = document.querySelector('.pictures'); // Блок с изображениями
@@ -89,8 +99,4 @@ var picTemplate = document.querySelector('#picture').content; // Шаблон и
 
 var photoArray = [];  // Массив с фотографиями
 
-// Генерация 25-ти изображений
-for (var i = 0; i < 25; i++) {
-  insertPhotoInArray(i);
-  var picture = generatePictureElement(i);
-};
+fillPhotoArray(25); // Вызов функции заполнения массива
