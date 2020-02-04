@@ -35,21 +35,27 @@ var assembleCommentText = function () {
   var sentences = randomize(1, 2);
 
   for (var i = 1; i <= sentences; i++) {
-    commentText += commentTemplates[randomize(0, commentTemplates.length - 1)] + ' ';
+    var randomSentenceIndex = randomize(0, commentTemplates.length - 1)
+
+    commentText += commentTemplates[randomSentenceIndex] + ' ';
   }
 
-  return commentText.substring(0, commentText.length - 1);
+  return commentText.trim();
 }
 
 // Генерация массива комментариев
 var generateComments = function() {
   var comments = [];
 
-  for (var i = 0; i < randomize(1, 4); i++) {
+  var commentsNumber = randomize(1, 4); // Кол-во комментариев: 1 + commentsNumber
+
+  for (var i = 0; i < commentsNumber; i++) {
+    var randomNameIndex = randomize(0, namesTemplate.length - 1);
+
     var comment = {
       avatar: 'img/avatar-' + randomize(1, 6) +'.svg',
       message: assembleCommentText(),
-      name: namesTemplate[randomize(0, namesTemplate.length - 1)]
+      name: namesTemplate[randomNameIndex]
     }
 
     comments.push(comment);
